@@ -192,15 +192,6 @@
     border-color: #dc3545 !important;
     }
     /* 新增的样式 */
-    /* 添加在现有样式表的最后 */
-    .missing-score-input {
-      border-color: #dc3545 !important;
-    }
-    .highlight-missing {
-      background-color: #fff3f3;
-    }
-
-
   </style>
 </head>
 <body>
@@ -273,10 +264,8 @@
 const audioGroups = [
   
   
- 
-
-// ////////////////~1000bps(ETDSO3G-H)//////////////////////////////
-{
+  // ////////////////~1000bps(ETDSO3G-H)//////////////////////////////
+  {
     groupName: "Group1 (Bitrate: ~1000bps)", //
     refAudio: "audio/GT/GT_testAditi-snips-test-288.wav",
     refSubtitle: "What is the forecast for starting at 3 a.m. in Dubults for wrong weather?", // 新增字幕字段
@@ -662,42 +651,9 @@ const audioGroups = [
       // 添加更多模型音频...
     ]
   },
+  
+];
 
-]; //放音频序列
-
-//随机打乱顺序-start//////////////
-// 固定乱序：使用 localStorage 保存乱序后的 ID 顺序
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
-
-// 为每组生成唯一的键名，例如 Group17 => group_shuffle_17
-function getShuffleKey(groupName) {
-  return `shuffle_${groupName.replace(/\s+/g, '_')}`;
-}
-
-audioGroups.forEach(group => {
-  const key = getShuffleKey(group.groupName);
-  let storedOrder = localStorage.getItem(key);
-
-  if (storedOrder) {
-    // 如果已有保存顺序，按保存顺序重新排列 models
-    const order = JSON.parse(storedOrder);
-    group.models.sort((a, b) => {
-      return order.indexOf(a.hidden_method || a.id) - order.indexOf(b.hidden_method || b.id);
-    });
-  } else {
-    // 第一次加载：打乱顺序并保存
-    shuffleArray(group.models);
-    const order = group.models.map(m => m.hidden_method || m.id);
-    localStorage.setItem(key, JSON.stringify(order));
-  }
-});
-
-// /随机打乱顺序-end///////////////
 // 生成组
 audioGroups.forEach((group, index) => {
   const groupDiv = document.createElement('div');
@@ -735,36 +691,15 @@ audioGroups.forEach((group, index) => {
 
 
   // 模型音频
-  
-//////////////////////////////
-  // group.models.forEach(model => {
-  //   const row = document.createElement('tr');
-  //   row.innerHTML = `
-  //     <td>${model.id}</td>
-  //     <td><audio controls src="${model.path}"></audio></td> 
-  //     <td><input type="number" min="0" max="100" data-group="${index + 1}" data-model="model${model.id}" data-hidden="${model.hidden_method || ''}"></td>
-  //   `;
-  //   tbody.appendChild(row);
-  // });
-///////////////////
-
-  // 替换这部分代码
-  group.models.forEach((model, modelIndex) => {
+  group.models.forEach(model => {
     const row = document.createElement('tr');
     row.innerHTML = `
-      <td>${modelIndex + 1}</td>  <!-- 显示顺序编号1,2,3... -->
+      <td>${model.id}</td>
       <td><audio controls src="${model.path}"></audio></td> 
-      <td><input type="number" min="0" max="100" 
-           data-group="${index + 1}" 
-           data-model="model${model.id}" 
-           data-hidden="${model.hidden_method || ''}"
-           data-original-id="${model.id}">
-      </td>
+      <td><input type="number" min="0" max="100" data-group="${index + 1}" data-model="model${model.id}" data-hidden="${model.hidden_method || ''}"></td>
     `;
     tbody.appendChild(row);
   });
-////////////////////
-
 
   table.appendChild(tbody);
   groupDiv.appendChild(table);
@@ -788,56 +723,19 @@ audioGroups.forEach((group, index) => {
     document.getElementById('current-group').textContent = currentGroupIndex + 1;
   }
 
-  // 添加在现有函数附近（例如放在updateGroupControls函数后面）
-  function checkCurrentGroupScores() {
-    const currentGroup = document.querySelector('.group.active');
-    const inputs = currentGroup.querySelectorAll('input[type="number"]');
-    
-    for (let input of inputs) {
-      if (input.value === "" || isNaN(input.value)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-
   document.getElementById('prev-group').addEventListener('click', () => {
     if (currentGroupIndex > 0) {
       currentGroupIndex--;
       showGroup(currentGroupIndex);
     }
   });
-  /////////////////////////////
-  // document.getElementById('next-group').addEventListener('click', () => {
-  //   if (currentGroupIndex < totalGroups - 1) {
-  //     currentGroupIndex++;
-  //     showGroup(currentGroupIndex);
-  //   }
-  // });
-  /////////////////////////////////
-  // 改为新的实现
+
   document.getElementById('next-group').addEventListener('click', () => {
-    if (!checkCurrentGroupScores()) {
-      alert('请完成当前组所有打分后再继续！');
-      const currentGroup = document.querySelector('.group.active');
-      const inputs = currentGroup.querySelectorAll('input[type="number"]');
-      inputs.forEach(input => {
-        if (input.value === "" || isNaN(input.value)) {
-          input.classList.add('missing-score-input');
-          input.parentElement.parentElement.classList.add('highlight-missing');
-        }
-      });
-      return;
-    }
-    
     if (currentGroupIndex < totalGroups - 1) {
       currentGroupIndex++;
       showGroup(currentGroupIndex);
     }
   });
-
-  ///////////////////////////////////
 
   function updateOverallProgress() {
     document.getElementById('overall-progress').textContent = `当前组 ${currentGroupIndex + 1}/${totalGroups}`;
@@ -1063,80 +961,24 @@ function clearScores() {
 ////////////////////////////////////////////////////////
 
 
-///////////////////
-  // 新增：更新实时结果框函数
-function updateResultsBox() {
-  const inputs = document.querySelectorAll('input[type="number"]');
-  let results = {};
 
-  inputs.forEach(input => {
-    const group = input.dataset.group;
-    const model = input.dataset.hidden || input.dataset.model;
-    const score = input.value;
-
-    if (!results[`Group ${group}`]) {
-      results[`Group ${group}`] = {};
-    }
-    results[`Group ${group}`][model] = score;
-  });
-
-  let resultText = "";
-  for (const [group, models] of Object.entries(results)) {
-    resultText += `${group}:
-`;
-    for (const [model, score] of Object.entries(models)) {
-      resultText += `  ${model}: ${score}\n`;
-    }
-    resultText += '\n';
+  window.onload = () => {
+    loadScoresFromStorage();
+    updateOverallProgress();
+    updateGroupControls();
   }
-
-  document.getElementById('results').value = resultText;
-}
-
-// 修改 input 监听器，加入实时结果更新功能
-document.addEventListener('input', (e) => {
-  if (e.target.matches('input[type="number"]')) {
-    const group = e.target.dataset.group;
-    updateProgress(group);
-    saveScoresToStorage();
-    updateResultsBox(); // 实时更新
-
-    // 移除高亮提示
-    e.target.classList.remove('missing-score-input');
-    e.target.parentElement.parentElement.classList.remove('highlight-missing');
-
-    const missingScores = checkMissingScores();
-    if (Object.keys(missingScores).length === 0) {
-      const existingAlert = document.querySelector('.missing-scores');
-      if (existingAlert) existingAlert.remove();
-    }
-  }
-});
-////////////////////
-
-/////////////////
-// 页面加载时自动刷新分数框
-window.onload = () => {
-  loadScoresFromStorage();
-  updateOverallProgress();
-  updateGroupControls();
-  updateResultsBox();
-}
-
-////////////////
-
-
 </script>
-
 <!-- start-抽奖 -->
-<!-- 修改后的抽奖弹窗部分 -->
+ <!-- 感谢抽奖弹窗 -->
 <div id="thank-you-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; color: white;">
   <div style="background-color: #fff; padding: 30px; border-radius: 10px; max-width: 500px; text-align: center; color: #333;">
     <h2 style="color: #007bff;">感谢参与测试！</h2>
     <p>您已完成所有评分任务，可以参与抽奖活动</p>
     
     <div id="gift-result" style="margin: 20px 0; font-size: 18px; min-height: 50px;">
-      <!-- 抽奖按钮会根据是否已抽奖显示不同内容 -->
+      <button onclick="drawGift()" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        点击抽奖
+      </button>
     </div>
     
     <div id="gift-list" style="display: none; margin-top: 20px;">
@@ -1157,37 +999,20 @@ window.onload = () => {
 </div>
 
 <script>
-// 检查是否已抽奖
-function hasDrawnGift() {
-  return localStorage.getItem('hasDrawnGift') === 'true';
-}
-
 function showThankYou() {
   document.getElementById('thank-you-modal').style.display = 'flex';
-  
-  // 根据是否已抽奖显示不同内容
-  const giftResult = document.getElementById('gift-result');
-  if(hasDrawnGift()) {
-    giftResult.innerHTML = '您已经参与过抽奖了，感谢您的参与！';
-  } else {
-    giftResult.innerHTML = `
-      <button onclick="drawGift()" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
-        点击抽奖
-      </button>`;
-  }
 }
 
 function closeThankYou() {
   document.getElementById('thank-you-modal').style.display = 'none';
+  document.getElementById('gift-result').innerHTML = `
+    <button onclick="drawGift()" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
+      点击抽奖
+    </button>`;
   document.getElementById('gift-list').style.display = 'none';
 }
 
 function drawGift() {
-  if(hasDrawnGift()) {
-    alert('您已经抽过奖了！');
-    return;
-  }
-
   const gifts = [
     "茶颜悦色/霸王茶姬",
     "花生/瓜子/乐事薯片",
@@ -1205,15 +1030,11 @@ function drawGift() {
       const result = gifts[Math.floor(Math.random() * gifts.length)];
       document.getElementById('gift-result').innerHTML = `恭喜获得: <strong style="color: #ff5722;">${result}</strong>`;
       document.getElementById('gift-list').style.display = 'block';
-      
-      // 标记为已抽奖
-      localStorage.setItem('hasDrawnGift', 'true');
     }
   }, 100);
 }
 </script>
 
  <!-- end-抽奖 -->
-
 </body>
 </html>
