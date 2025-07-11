@@ -912,7 +912,8 @@ function collectScores() {
   if (existingAlert) {
     existingAlert.remove();
   }
-  
+     // ✅ 如果都打完分，显示感谢抽奖弹窗
+     showThankYou();
   return true;
 }
 
@@ -965,6 +966,71 @@ function clearScores() {
     updateGroupControls();
   }
 </script>
+<!-- start-抽奖 -->
+ <!-- 感谢抽奖弹窗 -->
+<div id="thank-you-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; color: white;">
+  <div style="background-color: #fff; padding: 30px; border-radius: 10px; max-width: 500px; text-align: center; color: #333;">
+    <h2 style="color: #007bff;">感谢参与测试！</h2>
+    <p>您已完成所有评分任务，可以参与抽奖活动</p>
+    
+    <div id="gift-result" style="margin: 20px 0; font-size: 18px; min-height: 50px;">
+      <button onclick="drawGift()" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        点击抽奖
+      </button>
+    </div>
+    
+    <div id="gift-list" style="display: none; margin-top: 20px;">
+      <h3>奖品清单</h3>
+      <ul style="text-align: left; list-style-type: none; padding: 0;">
+        <li>🎁 五元红包</li>
+        <li>🎁 瓜子零食大礼包</li>
+        <li>🎁 精美笔记本</li>
+        <li>🎁 USB小风扇</li>
+      </ul>
+    </div>
+    
+    <button onclick="closeThankYou()" style="margin-top: 20px; padding: 8px 15px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">
+      关闭
+    </button>
+  </div>
+</div>
 
+<script>
+function showThankYou() {
+  document.getElementById('thank-you-modal').style.display = 'flex';
+}
+
+function closeThankYou() {
+  document.getElementById('thank-you-modal').style.display = 'none';
+  document.getElementById('gift-result').innerHTML = `
+    <button onclick="drawGift()" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
+      点击抽奖
+    </button>`;
+  document.getElementById('gift-list').style.display = 'none';
+}
+
+function drawGift() {
+  const gifts = [
+    "花生/瓜子/乐事薯片",
+    "精美笔记本",
+    "五元红包",
+    "USB小风扇"
+  ];
+  
+  let count = 0;
+  const interval = setInterval(() => {
+    document.getElementById('gift-result').innerHTML = `抽奖中: ${gifts[count % gifts.length]}`;
+    count++;
+    if(count > 15) {
+      clearInterval(interval);
+      const result = gifts[Math.floor(Math.random() * gifts.length)];
+      document.getElementById('gift-result').innerHTML = `恭喜获得: <strong style="color: #ff5722;">${result}</strong>`;
+      document.getElementById('gift-list').style.display = 'block';
+    }
+  }, 100);
+}
+</script>
+
+ <!-- end-抽奖 -->
 </body>
 </html>
