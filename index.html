@@ -205,17 +205,25 @@
     
     <div class="instructions">
       <h2>打分说明</h2>
-      <p>请根据每个音频与参考音频的音质差异进行 0–100 分的评分：</p>
+      <!-- <p>请根据<span style="color: red; font-weight: bold;">每个音频与参考音频的音质差异</span>（从内容、音色、韵律、响度和噪声几个角度比较）进行 0–100 分的评分：</p> -->
+
       
+      <p>请根据<strong style="color: red;">每个音频与参考音频的音质差异</strong>（从
+        <span style="color: blue;">内容</span>、
+        <span style="color: blue;">音色</span>、
+        <span style="color: blue;">韵律</span>、
+        <span style="color: blue;">响度</span>和
+        <span style="color: blue;">噪声</span>）5个角度比较进行 0–100 分的评分：</p>
+        
       <div class="rating-scale">
         <p><b>85–100</b>：几乎透明（Excellent），与参考几乎无差别</p>
-        <p><b>70–85</b>：良好（Good），轻微差别</p>
-        <p><b>50–70</b>：一般（Fair），明显下降</p>
-        <p><b>20–50</b>：差（Poor），有严重失真</p>
-        <p><b>0–20</b>：非常差（Bad），极度刺耳或无法接受</p>
+        <p><b>70–85</b>：良好，轻微差别</p>
+        <p><b>50–70</b>：一般，明显下降</p>
+        <p><b>20–50</b>：差，有严重失真</p>
+        <p><b>0–20</b>：非常差，极度刺耳或无法接受</p>
       </div>
       
-      <p><strong>注意：</strong>可以反复播放音频进行比对，仔细听辨后再打分。</p>
+      <p><strong>注意：可以反复播放音频进行比对，仔细听辨后再打分</strong>。</p>  
     </div>
   </div>
 
@@ -254,244 +262,13 @@
 
   // 生成组
 const audioGroups = [
-  {
-    groupName: "Group1(Bitrate: ~300bps)", // (~300bps)
-    refAudio: "audio/GT/GT_testAditi-snips-test-288.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
-    models: [
-      { id: 1, path: "audio/recon/SemantiCodec/0.31k/SC0.31k_testAditi-snips-test-288.wav" },
-      { id: 2, path: "audio/recon/Ours/0.3k/Ours0.3k_testAditi-snips-test-288.wav" },
-      { id: 3, path: "audio/recon/SemantiCodec/0.35k/SC0.35k_testAditi-snips-test-288.wav" },
-      { id: 4, path: "audio/recon/Ours/0.35k/Ours0.35k_testAditi-snips-test-288.wav" },
-      { id: 5, path: "audio/speex/4000bps/GT_testAditi-snips-test-288.wav" },
-
-      // 添加更多模型音频...
-    ]
-  },
-
-  {
-    groupName: "Group2(Bitrate: ~300bps)", // (~300bps)
-    refAudio: "audio/GT/GT_testAditi-snips-test-531.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
-    models: [
-      { id: 1, path: "audio/recon/SemantiCodec/0.31k/SC0.31k_testAditi-snips-test-531.wav" },
-      { id: 2, path: "audio/recon/Ours/0.3k/Ours0.3k_testAditi-snips-test-531.wav" },
-      { id: 3, path: "audio/recon/SemantiCodec/0.35k/SC0.35k_testAditi-snips-test-531.wav" },
-      { id: 4, path: "audio/recon/Ours/0.35k/Ours0.35k_testAditi-snips-test-531.wav" },
-      { id: 5, path: "audio/speex/4000bps/GT_testAditi-snips-test-531.wav" },
-      // 添加更多模型音频...
-    ]
-  },
-
-  {
-    groupName: "Group3(Bitrate: ~300bps)", // (~300bps)
-    refAudio: "audio/GT/GT_testAditi-snips-test-580.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
-    models: [
-      { id: 1, path: "audio/recon/SemantiCodec/0.31k/SC0.31k_testAditi-snips-test-580.wav" },
-      { id: 2, path: "audio/recon/Ours/0.3k/Ours0.3k_testAditi-snips-test-580.wav" },
-      { id: 3, path: "audio/recon/SemantiCodec/0.35k/SC0.35k_testAditi-snips-test-580.wav" },
-      { id: 4, path: "audio/recon/Ours/0.35k/Ours0.35k_testAditi-snips-test-580.wav" },
-      { id: 5, path: "audio/speex/4000bps/GT_testAditi-snips-test-580.wav" },
-      // 添加更多模型音频...
-    ]
-  },
-
-  {
-    groupName: "Group4(Bitrate: ~300bps)", // (~300bps)
-    refAudio: "audio/GT/GT_test_clean_1320-122612-0007.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
-    models: [
-      { id: 1, path: "audio/recon/SemantiCodec/0.31k/SC0.31k_test_clean_1320-122612-0007.wav" },
-      { id: 2, path: "audio/recon/Ours/0.3k/Ours0.3k_test_clean_1320-122612-0007.wav" },
-      { id: 3, path: "audio/recon/SemantiCodec/0.35k/SC0.35k_test_clean_1320-122612-0007.wav" },
-      { id: 4, path: "audio/recon/Ours/0.35k/Ours0.35k_test_clean_1320-122612-0007.wav" },
-      { id: 5, path: "audio/speex/4000bps/GT_test_clean_1320-122612-0007.wav" },
-      // 添加更多模型音频...
-    ]
-  },
   
-  {
-    groupName: "Group5(Bitrate: ~300bps)", // (~300bps)
-    refAudio: "audio/GT/GT_test_clean_7729-102255-0036.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
-    models: [
-      { id: 1, path: "audio/recon/SemantiCodec/0.31k/SC0.31k_test_clean_7729-102255-0036.wav" },
-      { id: 2, path: "audio/recon/Ours/0.3k/Ours0.3k_test_clean_7729-102255-0036.wav" },
-      { id: 3, path: "audio/recon/SemantiCodec/0.35k/SC0.35k_test_clean_7729-102255-0036.wav" },
-      { id: 4, path: "audio/recon/Ours/0.35k/Ours0.35k_test_clean_7729-102255-0036.wav" },
-      { id: 5, path: "audio/speex/4000bps/GT_test_clean_7729-102255-0036.wav" },
-      // 添加更多模型音频...
-    ]
-  },
-
-  {
-    groupName: "Group6(Bitrate: ~300bps)", // (~300bps)
-    refAudio: "audio/GT/GT_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
-    models: [
-      { id: 1, path: "audio/recon/SemantiCodec/0.31k/SC0.31k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
-      { id: 2, path: "audio/recon/Ours/0.3k/Ours0.3k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
-      { id: 3, path: "audio/recon/SemantiCodec/0.35k/SC0.35k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
-      { id: 4, path: "audio/recon/Ours/0.35k/Ours0.35k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
-      { id: 5, path: "audio/speex/4000bps/GT_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
-      // 添加更多模型音频...
-    ]
-  },
-
-  {
-    groupName: "Group7(Bitrate: ~300bps)", // (~300bps)
-    refAudio: "audio/GT/GT_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
-    models: [
-      { id: 1, path: "audio/recon/SemantiCodec/0.31k/SC0.31k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
-      { id: 2, path: "audio/recon/Ours/0.3k/Ours0.3k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
-      { id: 3, path: "audio/recon/SemantiCodec/0.35k/SC0.35k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
-      { id: 4, path: "audio/recon/Ours/0.35k/Ours0.35k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
-      { id: 5, path: "audio/speex/4000bps/GT_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
-      // 添加更多模型音频...
-    ]
-  },
-
-  {
-    groupName: "Group8(Bitrate: ~300bps)", // (~300bps)
-    refAudio: "audio/GT/GT_260-123286-0028.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
-    models: [
-      { id: 1, path: "audio/recon/SemantiCodec/0.31k/SC0.31k_260-123286-0028.flac" },
-      { id: 2, path: "audio/recon/Ours/0.3k/Ours0.3k_260-123286-0028.flac" },
-      { id: 3, path: "audio/recon/SemantiCodec/0.35k/SC0.35k_260-123286-0028.flac" },
-      { id: 4, path: "audio/recon/Ours/0.35k/Ours0.35k_260-123286-0028.flac" },
-      { id: 5, path: "audio/speex/4000bps/GT_260-123286-0028.wav" },
-      // 添加更多模型音频...
-    ]
-  },
-  // ////////////////~500bps//////////////////////////////
-  {
-    groupName: "Group9(Bitrate: ~500bps)", // (~300bps)
-    refAudio: "audio/GT/GT_testAditi-snips-test-288.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
-    models: [
-      { id: 1, path: "audio/recon/EnCodec/0.5k/EC0.5k_testAditi-snips-test-288.wav" },
-      { id: 2, path: "audio/recon/TiCodec/0.5k/TC0.5k_testAditi-snips-test-288.wav" },
-      { id: 3, path: "audio/recon/DAC/0.5k/DAC0.5k_testAditi-snips-test-288.wav" },
-      { id: 4, path: "audio/recon/SemantiCodec/0.63k/SC0.63k_testAditi-snips-test-288.wav" },
-      { id: 5, path: "audio/recon/Ours/0.47k/Ours0.47k_testAditi-snips-test-288.wav" },
-      { id: 6, path: "audio/speex/4000bps/GT_testAditi-snips-test-288.wav" },
-      // 添加更多模型音频...
-    ]
-  },
-
-  {
-    groupName: "Group10(Bitrate: ~500bps)", // (~300bps)
-    refAudio: "audio/GT/GT_testAditi-snips-test-531.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
-    models: [
-      { id: 1, path: "audio/recon/EnCodec/0.5k/EC0.5k_testAditi-snips-test-531.wav" },
-      { id: 2, path: "audio/recon/TiCodec/0.5k/TC0.5k_testAditi-snips-test-531.wav" },
-      { id: 3, path: "audio/recon/DAC/0.5k/DAC0.5k_testAditi-snips-test-531.wav" },
-      { id: 4, path: "audio/recon/SemantiCodec/0.63k/SC0.63k_testAditi-snips-test-531.wav" },
-      { id: 5, path: "audio/recon/Ours/0.47k/Ours0.47k_testAditi-snips-test-531.wav" },
-      { id: 6, path: "audio/speex/4000bps/GT_testAditi-snips-test-531.wav" },
-      // 添加更多模型音频...
-    ]
-  },
-
-  {
-    groupName: "Group11(Bitrate: ~500bps)", // (~300bps)
-    refAudio: "audio/GT/GT_testAditi-snips-test-580.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
-    models: [
-      { id: 1, path: "audio/recon/EnCodec/0.5k/EC0.5k_testAditi-snips-test-580.wav" },
-      { id: 2, path: "audio/recon/TiCodec/0.5k/TC0.5k_testAditi-snips-test-580.wav" },
-      { id: 3, path: "audio/recon/DAC/0.5k/DAC0.5k_testAditi-snips-test-580.wav" },
-      { id: 4, path: "audio/recon/SemantiCodec/0.63k/SC0.63k_testAditi-snips-test-580.wav" },
-      { id: 5, path: "audio/recon/Ours/0.47k/Ours0.47k_testAditi-snips-test-580.wav" },
-      { id: 6, path: "audio/speex/4000bps/GT_testAditi-snips-test-580.wav" },
-      // 添加更多模型音频...
-    ]
-  },
-
-  {
-    groupName: "Group12(Bitrate: ~500bps)", // (~300bps)
-    refAudio: "audio/GT/GT_test_clean_1320-122612-0007.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
-    models: [
-      { id: 1, path: "audio/recon/EnCodec/0.5k/EC0.5k_test_clean_1320-122612-0007.wav" },
-      { id: 2, path: "audio/recon/TiCodec/0.5k/TC0.5k_test_clean_1320-122612-0007.wav" },
-      { id: 3, path: "audio/recon/DAC/0.5k/DAC0.5k_test_clean_1320-122612-0007.wav" },
-      { id: 4, path: "audio/recon/SemantiCodec/0.63k/SC0.63k_test_clean_1320-122612-0007.wav" },
-      { id: 5, path: "audio/recon/Ours/0.47k/Ours0.47k_test_clean_1320-122612-0007.wav" },
-      { id: 6, path: "audio/speex/4000bps/GT_test_clean_1320-122612-0007.wav" },
-      // 添加更多模型音频...
-    ]
-  },
-
-  {
-    groupName: "Group13(Bitrate: ~500bps)", // (~300bps)
-    refAudio: "audio/GT/GT_test_clean_7729-102255-0036.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
-    models: [
-      { id: 1, path: "audio/recon/EnCodec/0.5k/EC0.5k_test_clean_7729-102255-0036.wav" },
-      { id: 2, path: "audio/recon/TiCodec/0.5k/TC0.5k_test_clean_7729-102255-0036.wav" },
-      { id: 3, path: "audio/recon/DAC/0.5k/DAC0.5k_test_clean_7729-102255-0036.wav" },
-      { id: 4, path: "audio/recon/SemantiCodec/0.63k/SC0.63k_test_clean_7729-102255-0036.wav" },
-      { id: 5, path: "audio/recon/Ours/0.47k/Ours0.47k_test_clean_7729-102255-0036.wav" },
-      { id: 6, path: "audio/speex/4000bps/GT_test_clean_7729-102255-0036.wav" },
-      // 添加更多模型音频...
-    ]
-  },
-
-  {
-    groupName: "Group14(Bitrate: ~500bps)", // (~300bps)
-    refAudio: "audio/GT/GT_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
-    models: [
-      { id: 1, path: "audio/recon/EnCodec/0.5k/EC0.5k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
-      { id: 2, path: "audio/recon/TiCodec/0.5k/TC0.5k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
-      { id: 3, path: "audio/recon/DAC/0.5k/DAC0.5k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
-      { id: 4, path: "audio/recon/SemantiCodec/0.63k/SC0.63k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
-      { id: 5, path: "audio/recon/Ours/0.47k/Ours0.47k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
-      { id: 6, path: "audio/speex/4000bps/GT_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
-      // 添加更多模型音频...
-    ]
-  },
-
-  {
-    groupName: "Group15(Bitrate: ~500bps)", // (~300bps)
-    refAudio: "audio/GT/GT_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
-    models: [
-      { id: 1, path: "audio/recon/EnCodec/0.5k/EC0.5k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
-      { id: 2, path: "audio/recon/TiCodec/0.5k/TC0.5k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
-      { id: 3, path: "audio/recon/DAC/0.5k/DAC0.5k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
-      { id: 4, path: "audio/recon/SemantiCodec/0.63k/SC0.63k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
-      { id: 5, path: "audio/recon/Ours/0.47k/Ours0.47k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
-      { id: 6, path: "audio/speex/4000bps/GT_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
-      // 添加更多模型音频...
-    ]
-  },
-
-  {
-    groupName: "Group16(Bitrate: ~500bps)", // (~300bps)
-    refAudio: "audio/GT/GT_260-123286-0028.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
-    models: [
-      { id: 1, path: "audio/recon/EnCodec/0.5k/EC0.5k_260-123286-0028.flac" },
-      { id: 2, path: "audio/recon/TiCodec/0.5k/TC0.5k_260-123286-0028.flac" },
-      { id: 3, path: "audio/recon/DAC/0.5k/DAC0.5k_260-123286-0028.flac" },
-      { id: 4, path: "audio/recon/SemantiCodec/0.63k/SC0.63k_260-123286-0028.flac" },
-      { id: 5, path: "audio/recon/Ours/0.47k/Ours0.47k_260-123286-0028.flac" },
-      { id: 6, path: "audio/speex/4000bps/GT_260-123286-0028.wav" },
-      // 添加更多模型音频...
-    ]
-  },
-
+  
   // ////////////////~1000bps//////////////////////////////
   {
-    groupName: "Group17(Bitrate: ~1000bps)", // (~300bps)
+    groupName: "Group1 (Bitrate: ~1000bps)", // (~300bps)
     refAudio: "audio/GT/GT_testAditi-snips-test-288.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
+    refSubtitle: "What is the forecast for starting at 3 a.m. in Dubults for wrong weather?", // 新增字幕字段
     models: [
       { id: 1, path: "audio/recon/EnCodec/1k/EC1k_testAditi-snips-test-288.wav" },
       { id: 2, path: "audio/recon/TiCodec/1k/TC1k_testAditi-snips-test-288.wav" },
@@ -499,14 +276,15 @@ const audioGroups = [
       { id: 4, path: "audio/recon/SemantiCodec/1.25k/SC1.25k_testAditi-snips-test-288.wav" },
       { id: 5, path: "audio/recon/Ours/0.97k/Ours0.97k_testAditi-snips-test-288.wav" },
       { id: 6, path: "audio/speex/4000bps/GT_testAditi-snips-test-288.wav" },
+      { id: 7, path: "audio/GT/GT_testAditi-snips-test-288.wav"}, //hidden reference
       // 添加更多模型音频...
     ]
   },
 
   {
-    groupName: "Group18(Bitrate: ~1000bps)", // (~300bps)
+    groupName: "Group2 (Bitrate: ~1000bps)", // (~300bps)
     refAudio: "audio/GT/GT_testAditi-snips-test-531.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
+    refSubtitle: "Look for the television show me the prince", // 新增字幕字段
     models: [
       { id: 1, path: "audio/recon/EnCodec/1k/EC1k_testAditi-snips-test-531.wav" },
       { id: 2, path: "audio/recon/TiCodec/1k/TC1k_testAditi-snips-test-531.wav" },
@@ -514,14 +292,15 @@ const audioGroups = [
       { id: 4, path: "audio/recon/SemantiCodec/1.25k/SC1.25k_testAditi-snips-test-531.wav" },
       { id: 5, path: "audio/recon/Ours/0.97k/Ours0.97k_testAditi-snips-test-531.wav" },
       { id: 6, path: "audio/speex/4000bps/GT_testAditi-snips-test-531.wav" },
+      { id: 7, path: "audio/GT/GT_testAditi-snips-test-531.wav"}, //hidden reference
       // 添加更多模型音频...
     ]
   },
 
   {
-    groupName: "Group19(Bitrate: ~1000bps)", // (~300bps)
+    groupName: "Group3 (Bitrate: ~1000bps)", // (~300bps)
     refAudio: "audio/GT/GT_testAditi-snips-test-580.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
+    refSubtitle: "Please find me the journal of the british astronomical association movie.", // 新增字幕字段
     models: [
       { id: 1, path: "audio/recon/EnCodec/1k/EC1k_testAditi-snips-test-580.wav" },
       { id: 2, path: "audio/recon/TiCodec/1k/TC1k_testAditi-snips-test-580.wav" },
@@ -529,14 +308,15 @@ const audioGroups = [
       { id: 4, path: "audio/recon/SemantiCodec/1.25k/SC1.25k_testAditi-snips-test-580.wav" },
       { id: 5, path: "audio/recon/Ours/0.97k/Ours0.97k_testAditi-snips-test-580.wav" },
       { id: 6, path: "audio/speex/4000bps/GT_testAditi-snips-test-580.wav" },
+      { id: 7, path: "audio/GT/GT_testAditi-snips-test-580.wav"}, //hidden reference
       // 添加更多模型音频...
     ]
   },
 
   {
-    groupName: "Group20(Bitrate: ~1000bps)", // (~300bps)
+    groupName: "Group4 (Bitrate: ~1000bps)", // (~300bps)
     refAudio: "audio/GT/GT_test_clean_1320-122612-0007.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
+    refSubtitle: "Chingachgook had caught the look, and motioning with his hand, he bade him speak.", // 新增字幕字段
     models: [
       { id: 1, path: "audio/recon/EnCodec/1k/EC1k_test_clean_1320-122612-0007.wav" },
       { id: 2, path: "audio/recon/TiCodec/1k/TC1k_test_clean_1320-122612-0007.wav" },
@@ -544,14 +324,15 @@ const audioGroups = [
       { id: 4, path: "audio/recon/SemantiCodec/1.25k/SC1.25k_test_clean_1320-122612-0007.wav" },
       { id: 5, path: "audio/recon/Ours/0.97k/Ours0.97k_test_clean_1320-122612-0007.wav" },
       { id: 6, path: "audio/speex/4000bps/GT_test_clean_1320-122612-0007.wav" },
+      { id: 7, path: "audio/GT/GT_test_clean_1320-122612-0007.wav"}, //hidden reference
       // 添加更多模型音频...
     ]
   },
 
   {
-    groupName: "Group21(Bitrate: ~1000bps)", // (~300bps)
+    groupName: "Group5 (Bitrate: ~1000bps)", // (~300bps)
     refAudio: "audio/GT/GT_test_clean_7729-102255-0036.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
+    refSubtitle: "He planted a company before the hotel and demanded a surrender of the arms belonging to the Free State Military Companies.", // 新增字幕字段
     models: [
       { id: 1, path: "audio/recon/EnCodec/1k/EC1k_test_clean_7729-102255-0036.wav" },
       { id: 2, path: "audio/recon/TiCodec/1k/TC1k_test_clean_7729-102255-0036.wav" },
@@ -559,14 +340,15 @@ const audioGroups = [
       { id: 4, path: "audio/recon/SemantiCodec/1.25k/SC1.25k_test_clean_7729-102255-0036.wav" },
       { id: 5, path: "audio/recon/Ours/0.97k/Ours0.97k_test_clean_7729-102255-0036.wav" },
       { id: 6, path: "audio/speex/4000bps/GT_test_clean_7729-102255-0036.wav" },
+      { id: 7, path: "audio/GT/GT_test_clean_7729-102255-0036.wav"}, //hidden reference
       // 添加更多模型音频...
     ]
   },
 
   {
-    groupName: "Group22(Bitrate: ~1000bps)", // (~300bps)
+    groupName: "Group6 (Bitrate: ~1000bps)", // (~300bps)
     refAudio: "audio/GT/GT_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
+    refSubtitle: "Could you increase the heating?", // 新增字幕字段
     models: [
       { id: 1, path: "audio/recon/EnCodec/1k/EC1k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
       { id: 2, path: "audio/recon/TiCodec/1k/TC1k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
@@ -574,14 +356,15 @@ const audioGroups = [
       { id: 4, path: "audio/recon/SemantiCodec/1.25k/SC1.25k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
       { id: 5, path: "audio/recon/Ours/0.97k/Ours0.97k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
       { id: 6, path: "audio/speex/4000bps/GT_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
+      { id: 7, path: "audio/GT/GT_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav"}, //hidden reference
       // 添加更多模型音频...
     ]
   },
 
   {
-    groupName: "Group23(Bitrate: ~1000bps)", // (~300bps)
+    groupName: "Group7 (Bitrate: ~1000bps)", // (~300bps)
     refAudio: "audio/GT/GT_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
+    refSubtitle: "Okay, now switch the main language to Korean.", // 新增字幕字段
     models: [
       { id: 1, path: "audio/recon/EnCodec/1k/EC1k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
       { id: 2, path: "audio/recon/TiCodec/1k/TC1k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
@@ -589,14 +372,15 @@ const audioGroups = [
       { id: 4, path: "audio/recon/SemantiCodec/1.25k/SC1.25k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
       { id: 5, path: "audio/recon/Ours/0.97k/Ours0.97k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
       { id: 6, path: "audio/speex/4000bps/GT_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
+      { id: 7, path: "audio/GT/GT_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav"}, //hidden reference
       // 添加更多模型音频...
     ]
   },
 
   {
-    groupName: "Group24(Bitrate: ~1000bps)", // (~300bps)
+    groupName: "Group8 (Bitrate: ~1000bps)", // (~300bps)
     refAudio: "audio/GT/GT_260-123286-0028.wav",
-    refSubtitle: "这是第一组的参考音频字幕内容", // 新增字幕字段
+    refSubtitle: "Its jaw is enormous and according to naturalists it is armed with no less than one hundred and eighty two teeth.", // 新增字幕字段
     models: [
       { id: 1, path: "audio/recon/EnCodec/1k/EC1k_260-123286-0028.flac" },
       { id: 2, path: "audio/recon/TiCodec/1k/TC1k_260-123286-0028.flac" },
@@ -604,10 +388,260 @@ const audioGroups = [
       { id: 4, path: "audio/recon/SemantiCodec/1.25k/SC1.25k_260-123286-0028.flac" },
       { id: 5, path: "audio/recon/Ours/0.97k/Ours0.97k_260-123286-0028.flac" },
       { id: 6, path: "audio/speex/4000bps/GT_260-123286-0028.wav" },
+      { id: 7, path: "audio/GT/GT_260-123286-0028.wav"}, //hidden reference
       // 添加更多模型音频...
     ]
   },
 
+// ////////////////~500bps//////////////////////////////
+{
+    groupName: "Group9 (Bitrate: ~500bps)", // (~300bps)
+    refAudio: "audio/GT/GT_testAditi-snips-test-288.wav",
+    refSubtitle: "What is the forecast for starting at 3 a.m. in Dubults for wrong weather?", // 新增字幕字段
+    models: [
+      { id: 1, path: "audio/recon/EnCodec/0.5k/EC0.5k_testAditi-snips-test-288.wav" },
+      { id: 2, path: "audio/recon/TiCodec/0.5k/TC0.5k_testAditi-snips-test-288.wav" },
+      { id: 3, path: "audio/recon/DAC/0.5k/DAC0.5k_testAditi-snips-test-288.wav" },
+      { id: 4, path: "audio/recon/SemantiCodec/0.63k/SC0.63k_testAditi-snips-test-288.wav" },
+      { id: 5, path: "audio/recon/Ours/0.47k/Ours0.47k_testAditi-snips-test-288.wav" },
+      { id: 6, path: "audio/speex/4000bps/GT_testAditi-snips-test-288.wav" },
+      { id: 7, path: "audio/GT/GT_testAditi-snips-test-288.wav" },
+      // 添加更多模型音频...
+    ]
+  },
+
+  {
+    groupName: "Group10 (Bitrate: ~500bps)", // (~300bps)
+    refAudio: "audio/GT/GT_testAditi-snips-test-531.wav",
+    refSubtitle: "Look for the television show me the prince", // 新增字幕字段
+    models: [
+      { id: 1, path: "audio/recon/EnCodec/0.5k/EC0.5k_testAditi-snips-test-531.wav" },
+      { id: 2, path: "audio/recon/TiCodec/0.5k/TC0.5k_testAditi-snips-test-531.wav" },
+      { id: 3, path: "audio/recon/DAC/0.5k/DAC0.5k_testAditi-snips-test-531.wav" },
+      { id: 4, path: "audio/recon/SemantiCodec/0.63k/SC0.63k_testAditi-snips-test-531.wav" },
+      { id: 5, path: "audio/recon/Ours/0.47k/Ours0.47k_testAditi-snips-test-531.wav" },
+      { id: 6, path: "audio/speex/4000bps/GT_testAditi-snips-test-531.wav" },
+      { id: 7, path: "audio/GT/GT_testAditi-snips-test-531.wav" },
+      // 添加更多模型音频...
+    ]
+  },
+
+  {
+    groupName: "Group11 (Bitrate: ~500bps)", // (~300bps)
+    refAudio: "audio/GT/GT_testAditi-snips-test-580.wav",
+    refSubtitle: "Please find me the journal of the british astronomical association movie.", // 新增字幕字段
+    models: [
+      { id: 1, path: "audio/recon/EnCodec/0.5k/EC0.5k_testAditi-snips-test-580.wav" },
+      { id: 2, path: "audio/recon/TiCodec/0.5k/TC0.5k_testAditi-snips-test-580.wav" },
+      { id: 3, path: "audio/recon/DAC/0.5k/DAC0.5k_testAditi-snips-test-580.wav" },
+      { id: 4, path: "audio/recon/SemantiCodec/0.63k/SC0.63k_testAditi-snips-test-580.wav" },
+      { id: 5, path: "audio/recon/Ours/0.47k/Ours0.47k_testAditi-snips-test-580.wav" },
+      { id: 6, path: "audio/speex/4000bps/GT_testAditi-snips-test-580.wav" },
+      { id: 7, path: "audio/GT/GT_testAditi-snips-test-580.wav" },
+      // 添加更多模型音频...
+    ]
+  },
+
+  {
+    groupName: "Group12 (Bitrate: ~500bps)", // (~300bps)
+    refAudio: "audio/GT/GT_test_clean_1320-122612-0007.wav",
+    refSubtitle: "Chingachgook had caught the look, and motioning with his hand, he bade him speak.", // 新增字幕字段
+    models: [
+      { id: 1, path: "audio/recon/EnCodec/0.5k/EC0.5k_test_clean_1320-122612-0007.wav" },
+      { id: 2, path: "audio/recon/TiCodec/0.5k/TC0.5k_test_clean_1320-122612-0007.wav" },
+      { id: 3, path: "audio/recon/DAC/0.5k/DAC0.5k_test_clean_1320-122612-0007.wav" },
+      { id: 4, path: "audio/recon/SemantiCodec/0.63k/SC0.63k_test_clean_1320-122612-0007.wav" },
+      { id: 5, path: "audio/recon/Ours/0.47k/Ours0.47k_test_clean_1320-122612-0007.wav" },
+      { id: 6, path: "audio/speex/4000bps/GT_test_clean_1320-122612-0007.wav" },
+      { id: 7, path: "audio/GT/GT_test_clean_1320-122612-0007.wav" },
+      // 添加更多模型音频...
+    ]
+  },
+
+  {
+    groupName: "Group13 (Bitrate: ~500bps)", // (~300bps)
+    refAudio: "audio/GT/GT_test_clean_7729-102255-0036.wav",
+    refSubtitle: "He planted a company before the hotel and demanded a surrender of the arms belonging to the Free State Military Companies.", // 新增字幕字段
+    models: [
+      { id: 1, path: "audio/recon/EnCodec/0.5k/EC0.5k_test_clean_7729-102255-0036.wav" },
+      { id: 2, path: "audio/recon/TiCodec/0.5k/TC0.5k_test_clean_7729-102255-0036.wav" },
+      { id: 3, path: "audio/recon/DAC/0.5k/DAC0.5k_test_clean_7729-102255-0036.wav" },
+      { id: 4, path: "audio/recon/SemantiCodec/0.63k/SC0.63k_test_clean_7729-102255-0036.wav" },
+      { id: 5, path: "audio/recon/Ours/0.47k/Ours0.47k_test_clean_7729-102255-0036.wav" },
+      { id: 6, path: "audio/speex/4000bps/GT_test_clean_7729-102255-0036.wav" },
+      { id: 7, path: "audio/GT/GT_test_clean_7729-102255-0036.wav" },
+      // 添加更多模型音频...
+    ]
+  },
+
+  {
+    groupName: "Group14 (Bitrate: ~500bps)", // (~300bps)
+    refAudio: "audio/GT/GT_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav",
+    refSubtitle: "Could you increase the heating?", // 新增字幕字段
+    models: [
+      { id: 1, path: "audio/recon/EnCodec/0.5k/EC0.5k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
+      { id: 2, path: "audio/recon/TiCodec/0.5k/TC0.5k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
+      { id: 3, path: "audio/recon/DAC/0.5k/DAC0.5k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
+      { id: 4, path: "audio/recon/SemantiCodec/0.63k/SC0.63k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
+      { id: 5, path: "audio/recon/Ours/0.47k/Ours0.47k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
+      { id: 6, path: "audio/speex/4000bps/GT_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
+      { id: 7, path: "audio/GT/GT_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
+      // 添加更多模型音频...
+    ]
+  },
+
+  {
+    groupName: "Group15 (Bitrate: ~500bps)", // (~300bps)
+    refAudio: "audio/GT/GT_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav",
+    refSubtitle: "Okay, now switch the main language to Korean.", // 新增字幕字段
+    models: [
+      { id: 1, path: "audio/recon/EnCodec/0.5k/EC0.5k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
+      { id: 2, path: "audio/recon/TiCodec/0.5k/TC0.5k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
+      { id: 3, path: "audio/recon/DAC/0.5k/DAC0.5k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
+      { id: 4, path: "audio/recon/SemantiCodec/0.63k/SC0.63k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
+      { id: 5, path: "audio/recon/Ours/0.47k/Ours0.47k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
+      { id: 6, path: "audio/speex/4000bps/GT_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
+      { id: 7, path: "audio/GT/GT_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
+      // 添加更多模型音频...
+    ]
+  },
+
+  {
+    groupName: "Group16 (Bitrate: ~500bps)", // (~300bps)
+    refAudio: "audio/GT/GT_260-123286-0028.wav",
+    refSubtitle: "Its jaw is enormous and according to naturalists it is armed with no less than one hundred and eighty two teeth.", // 新增字幕字段
+    models: [
+      { id: 1, path: "audio/recon/EnCodec/0.5k/EC0.5k_260-123286-0028.flac" },
+      { id: 2, path: "audio/recon/TiCodec/0.5k/TC0.5k_260-123286-0028.flac" },
+      { id: 3, path: "audio/recon/DAC/0.5k/DAC0.5k_260-123286-0028.flac" },
+      { id: 4, path: "audio/recon/SemantiCodec/0.63k/SC0.63k_260-123286-0028.flac" },
+      { id: 5, path: "audio/recon/Ours/0.47k/Ours0.47k_260-123286-0028.flac" },
+      { id: 6, path: "audio/speex/4000bps/GT_260-123286-0028.wav" },
+      { id: 7, path: "audio/GT/GT_260-123286-0028.wav" },
+      // 添加更多模型音频...
+    ]
+  },
+
+
+  {
+    groupName: "Group17 (Bitrate: ~300bps)", // (~300bps)
+    refAudio: "audio/GT/GT_testAditi-snips-test-288.wav",
+    refSubtitle: "What is the forecast for starting at 3 a.m. in Dubults for wrong weather?", // 新增字幕字段
+    models: [
+      { id: 1, path: "audio/recon/SemantiCodec/0.31k/SC0.31k_testAditi-snips-test-288.wav" },
+      { id: 2, path: "audio/recon/Ours/0.3k/Ours0.3k_testAditi-snips-test-288.wav" },
+      { id: 3, path: "audio/recon/SemantiCodec/0.35k/SC0.35k_testAditi-snips-test-288.wav" },
+      { id: 4, path: "audio/recon/Ours/0.35k/Ours0.35k_testAditi-snips-test-288.wav" },
+      { id: 5, path: "audio/speex/4000bps/GT_testAditi-snips-test-288.wav" },
+      { id: 6, path: "audio/GT/GT_testAditi-snips-test-288.wav" },
+      // 添加更多模型音频...
+    ]
+  },
+
+  {
+    groupName: "Group18 (Bitrate: ~300bps)", // (~300bps)
+    refAudio: "audio/GT/GT_testAditi-snips-test-531.wav",
+    refSubtitle: "Look for the television show me the prince", // 新增字幕字段
+    models: [
+      { id: 1, path: "audio/recon/SemantiCodec/0.31k/SC0.31k_testAditi-snips-test-531.wav" },
+      { id: 2, path: "audio/recon/Ours/0.3k/Ours0.3k_testAditi-snips-test-531.wav" },
+      { id: 3, path: "audio/recon/SemantiCodec/0.35k/SC0.35k_testAditi-snips-test-531.wav" },
+      { id: 4, path: "audio/recon/Ours/0.35k/Ours0.35k_testAditi-snips-test-531.wav" },
+      { id: 5, path: "audio/speex/4000bps/GT_testAditi-snips-test-531.wav" },
+      { id: 6, path: "audio/GT/GT_testAditi-snips-test-531.wav" },
+      // 添加更多模型音频...
+    ]
+  },
+
+  {
+    groupName: "Group19 (Bitrate: ~300bps)", // (~300bps)
+    refAudio: "audio/GT/GT_testAditi-snips-test-580.wav",
+    refSubtitle: "Please find me the journal of the british astronomical association movie.", // 新增字幕字段
+    models: [
+      { id: 1, path: "audio/recon/SemantiCodec/0.31k/SC0.31k_testAditi-snips-test-580.wav" },
+      { id: 2, path: "audio/recon/Ours/0.3k/Ours0.3k_testAditi-snips-test-580.wav" },
+      { id: 3, path: "audio/recon/SemantiCodec/0.35k/SC0.35k_testAditi-snips-test-580.wav" },
+      { id: 4, path: "audio/recon/Ours/0.35k/Ours0.35k_testAditi-snips-test-580.wav" },
+      { id: 5, path: "audio/speex/4000bps/GT_testAditi-snips-test-580.wav" },
+      { id: 6, path: "audio/GT/GT_testAditi-snips-test-580.wav" },
+      // 添加更多模型音频...
+    ]
+  },
+
+  {
+    groupName: "Group20 (Bitrate: ~300bps)", // (~300bps)
+    refAudio: "audio/GT/GT_test_clean_1320-122612-0007.wav",
+    refSubtitle: "Chingachgook had caught the look, and motioning with his hand, he bade him speak.", // 新增字幕字段
+    models: [
+      { id: 1, path: "audio/recon/SemantiCodec/0.31k/SC0.31k_test_clean_1320-122612-0007.wav" },
+      { id: 2, path: "audio/recon/Ours/0.3k/Ours0.3k_test_clean_1320-122612-0007.wav" },
+      { id: 3, path: "audio/recon/SemantiCodec/0.35k/SC0.35k_test_clean_1320-122612-0007.wav" },
+      { id: 4, path: "audio/recon/Ours/0.35k/Ours0.35k_test_clean_1320-122612-0007.wav" },
+      { id: 5, path: "audio/speex/4000bps/GT_test_clean_1320-122612-0007.wav" },
+      { id: 6, path: "audio/GT/GT_test_clean_1320-122612-0007.wav" },
+      // 添加更多模型音频...
+    ]
+  },
+  
+  {
+    groupName: "Group21 (Bitrate: ~300bps)", // (~300bps)
+    refAudio: "audio/GT/GT_test_clean_7729-102255-0036.wav",
+    refSubtitle: "He planted a company before the hotel and demanded a surrender of the arms belonging to the Free State Military Companies.", // 新增字幕字段
+    models: [
+      { id: 1, path: "audio/recon/SemantiCodec/0.31k/SC0.31k_test_clean_7729-102255-0036.wav" },
+      { id: 2, path: "audio/recon/Ours/0.3k/Ours0.3k_test_clean_7729-102255-0036.wav" },
+      { id: 3, path: "audio/recon/SemantiCodec/0.35k/SC0.35k_test_clean_7729-102255-0036.wav" },
+      { id: 4, path: "audio/recon/Ours/0.35k/Ours0.35k_test_clean_7729-102255-0036.wav" },
+      { id: 5, path: "audio/speex/4000bps/GT_test_clean_7729-102255-0036.wav" },
+      { id: 6, path: "audio/GT/GT_test_clean_7729-102255-0036.wav" },
+      // 添加更多模型音频...
+    ]
+  },
+
+  {
+    groupName: "Group22 (Bitrate: ~300bps)", // (~300bps)
+    refAudio: "audio/GT/GT_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav",
+    refSubtitle: "Could you increase the heating?", // 新增字幕字段
+    models: [
+      { id: 1, path: "audio/recon/SemantiCodec/0.31k/SC0.31k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
+      { id: 2, path: "audio/recon/Ours/0.3k/Ours0.3k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
+      { id: 3, path: "audio/recon/SemantiCodec/0.35k/SC0.35k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
+      { id: 4, path: "audio/recon/Ours/0.35k/Ours0.35k_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
+      { id: 5, path: "audio/speex/4000bps/GT_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
+      { id: 6, path: "audio/GT/GT_wavs_speakers_7NqqnAOPVVSKnxyv_1f3fba10-4632-11e9-bc65-55b32b211b66.wav" },
+      // 添加更多模型音频...
+    ]
+  },
+
+  {
+    groupName: "Group23 (Bitrate: ~300bps)", // (~300bps)
+    refAudio: "audio/GT/GT_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav",
+    refSubtitle: "Okay, now switch the main language to Korean.", // 新增字幕字段
+    models: [
+      { id: 1, path: "audio/recon/SemantiCodec/0.31k/SC0.31k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
+      { id: 2, path: "audio/recon/Ours/0.3k/Ours0.3k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
+      { id: 3, path: "audio/recon/SemantiCodec/0.35k/SC0.35k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
+      { id: 4, path: "audio/recon/Ours/0.35k/Ours0.35k_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
+      { id: 5, path: "audio/speex/4000bps/GT_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
+      { id: 6, path: "audio/GT/GT_wavs_speakers_7NqqnAOPVVSKnxyv_e3bd7690-4630-11e9-bc65-55b32b211b66.wav" },
+      // 添加更多模型音频...
+    ]
+  },
+
+  {
+    groupName: "Group24 (Bitrate: ~300bps)", // (~300bps)
+    refAudio: "audio/GT/GT_260-123286-0028.wav",
+    refSubtitle: "Its jaw is enormous and according to naturalists it is armed with no less than one hundred and eighty two teeth.", // 新增字幕字段
+    models: [
+      { id: 1, path: "audio/recon/SemantiCodec/0.31k/SC0.31k_260-123286-0028.flac" },
+      { id: 2, path: "audio/recon/Ours/0.3k/Ours0.3k_260-123286-0028.flac" },
+      { id: 3, path: "audio/recon/SemantiCodec/0.35k/SC0.35k_260-123286-0028.flac" },
+      { id: 4, path: "audio/recon/Ours/0.35k/Ours0.35k_260-123286-0028.flac" },
+      { id: 5, path: "audio/speex/4000bps/GT_260-123286-0028.wav" },
+      { id: 6, path: "audio/GT/GT_260-123286-0028.wav"},
+      // 添加更多模型音频...
+    ]
+  },
   
 ];
 
