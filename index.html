@@ -1081,23 +1081,7 @@ function collectScores() {
 
 
 
-// 修改后的downloadScores函数
-// function downloadScores() {
-//   const missingScores = checkMissingScores();
-  
-//   if (Object.keys(missingScores).length > 0) {
-//     return showMissingScoresAlert(missingScores);
-//   }
-  
-//   collectScores();
-//   const text = document.getElementById('results').value;
-//   const blob = new Blob([text], { type: "text/plain" });
-//   const link = document.createElement("a");
-//   link.href = URL.createObjectURL(blob);
-//   link.download = "MUSHRA_Scores.txt";
-//   link.click();
-//   return true;
-// }
+
 
 
 function downloadScores() {
