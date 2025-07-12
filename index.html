@@ -199,8 +199,27 @@
     .highlight-missing {
       background-color: #fff3f3;
     }
-
-
+  /* 新增弹窗样式 */
+  .completion-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      max-width: 400px;
+    }
+    /*  */
   </style>
 </head>
 <body>
@@ -232,7 +251,7 @@
           <li><span style="color: blue;">音色</span>：说话人是否一致</li>
           <li><span style="color: blue;">韵律</span>：语调节奏是否一致</li>
           <li><span style="color: blue;">响度</span>：音量是否稳定</li>
-          <li><span style="color: blue;">噪声</span>：背景是否干净</li>
+          <li><span style="color: blue;">噪声控制</span>：背景是否干净</li>
         </ul>
         
         
@@ -272,6 +291,20 @@
     </div>
   </div>
 </div>
+
+
+<!-- 完成提示弹窗 -->
+<div id="completionModal" class="completion-modal">
+  <div class="modal-content">
+    <h3>评分完成</h3>
+    <p>您已完成所有评分！</p>
+    <button onclick="downloadAndClose()">保存并下载结果</button>
+    <button onclick="closeModal()">仅查看结果</button>
+  </div>
+</div>
+
+
+
 
 <script>
   const totalGroups = 24; //这里是设置组数的
@@ -1040,29 +1073,53 @@ function collectScores() {
     existingAlert.remove();
   }
      // ✅ 如果都打完分，显示感谢抽奖弹窗
-     showThankYou();
+    //  showThankYou();
+    document.getElementById('completionModal').style.display = 'flex';
   return true;
 }
+
 
 
 
 // 修改后的downloadScores函数
+// function downloadScores() {
+//   const missingScores = checkMissingScores();
+  
+//   if (Object.keys(missingScores).length > 0) {
+//     return showMissingScoresAlert(missingScores);
+//   }
+  
+//   collectScores();
+//   const text = document.getElementById('results').value;
+//   const blob = new Blob([text], { type: "text/plain" });
+//   const link = document.createElement("a");
+//   link.href = URL.createObjectURL(blob);
+//   link.download = "MUSHRA_Scores.txt";
+//   link.click();
+//   return true;
+// }
+
+
 function downloadScores() {
   const missingScores = checkMissingScores();
-  
   if (Object.keys(missingScores).length > 0) {
     return showMissingScoresAlert(missingScores);
   }
   
-  collectScores();
+  collectScores(); // 确保结果是最新的
   const text = document.getElementById('results').value;
   const blob = new Blob([text], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+  
   const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "MUSHRA_Scores.txt";
+  link.href = url;
+  link.download = `MUSHRA_评分结果_${new Date().toLocaleString('zh-CN')}.txt`;
+  document.body.appendChild(link);
   link.click();
-  return true;
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 
 // 修改后的clearScores函数
@@ -1084,7 +1141,14 @@ function clearScores() {
   }
 }
 ////////////////////////////////////////////////////////
+function downloadAndClose() {
+  closeModal();
+  downloadScores(); // 调用现有的下载函数
+}
 
+function closeModal() {
+  document.getElementById('completionModal').style.display = 'none';
+}
 
 ///////////////////
   // 新增：更新实时结果框函数
@@ -1115,6 +1179,7 @@ function updateResultsBox() {
 
   document.getElementById('results').value = resultText;
 }
+
 
 // 修改 input 监听器，加入实时结果更新功能
 document.addEventListener('input', (e) => {
@@ -1149,82 +1214,10 @@ window.onload = () => {
 ////////////////
 
 
+
 </script>
 
-<!-- start-抽奖 -->
-<!-- 修改后的抽奖弹窗部分 -->
-<!-- 修改后的抽奖弹窗部分 -->
-<div id="thank-you-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; color: white;">
-  <div style="background-color: #fff; padding: 30px; border-radius: 10px; max-width: 500px; text-align: center; color: #333;">
-    <h2 style="color: #007bff;">感谢参与测试！</h2>
-    <p>您已完成所有评分任务，可以参与抽奖活动</p>
-    
-    <div id="gift-result" style="margin: 20px 0; font-size: 18px; min-height: 50px;">
-      <!-- 抽奖按钮会根据是否已抽奖显示不同内容 -->
-    </div>
-    
-    <div id="gift-list" style="display: none; margin-top: 20px;">
-      <h3>当前时间：2025年7月11日 19:23:57（北京时间）</h3>
-      <h3>奖品清单</h3>
-      <ul style="text-align: left; list-style-type: none; padding: 0;">
-        <li>🎁 零食礼包（必中）</li>
-      </ul>
-    </div>
-    
-    <button onclick="closeThankYou()" style="margin-top: 20px; padding: 8px 15px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">
-      关闭
-    </button>
-  </div>
-</div>
 
-<script>
-// 检查是否已抽奖
-function hasDrawnGift() {
-  return localStorage.getItem('hasDrawnGift') === 'true';
-}
-
-function showThankYou() {
-  document.getElementById('thank-you-modal').style.display = 'flex';
-  
-  // 根据是否已抽奖显示不同内容
-  const giftResult = document.getElementById('gift-result');
-  if(hasDrawnGift()) {
-    giftResult.innerHTML = '您已领取过零食礼包，感谢参与！';
-    document.getElementById('gift-list').style.display = 'block';
-  } else {
-    giftResult.innerHTML = `
-      <button onclick="drawGift()" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
-        点击领取零食礼包
-      </button>`;
-  }
-}
-
-function closeThankYou() {
-  document.getElementById('thank-you-modal').style.display = 'none';
-}
-
-function drawGift() {
-  if(hasDrawnGift()) {
-    alert('您已经领取过奖品了！');
-    return;
-  }
-
-  let count = 0;
-  const interval = setInterval(() => {
-    document.getElementById('gift-result').innerHTML = `抽奖中... ${count%2 ? '🎁' : '✨'}`;
-    count++;
-    if(count > 5) {
-      clearInterval(interval);
-      document.getElementById('gift-result').innerHTML = `恭喜获得: <strong style="color: #ff5722;">零食礼包</strong>`;
-      document.getElementById('gift-list').style.display = 'block';
-      
-      // 标记为已抽奖
-      localStorage.setItem('hasDrawnGift', 'true');
-    }
-  }, 200);
-}
-</script>
- <!-- end-抽奖 -->
 
 </body>
 </html>
