@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MUSHRA Listening Test - Instructions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 40px 50px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.15);
+      width: 600px;
+      text-align: left;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    ul {
+      line-height: 1.7;
+    }
+
+    .button-area {
+      margin-top: 35px;
+      text-align: center;
+    }
+
+    .select-btn {
+      padding: 12px 24px;
+      margin: 10px;
+      font-size: 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .english {
+      background: #4A90E2;
+      color: white;
+    }
+
+    .english:hover {
+      background: #3b7bc0;
+    }
+
+    .chinese {
+      background: #50B167;
+      color: white;
+    }
+
+    .chinese:hover {
+      background: #409555;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>MUSHRA Listening Test Instructions</h2>
+
+    <p>感谢您参与本次听音质量评估！在开始测试前，请阅读以下注意事项：</p>
+
+    <ul>
+      <li>请 <strong>佩戴耳机</strong> 进行测试。</li>
+      <li>请在 <strong>安静的环境</strong> 下进行。</li>
+      <li>每次试听时，请将各音频与 <strong>参考音频（Reference）</strong> 进行比较。</li>
+      <li>打分时请严格遵守 MUSHRA 左侧评分栏的说明。</li>
+      <li>请完整听完音频后再评分。</li>
+      <li>请公平、认真地评价音频质量。</li>
+      <li>您需要先完成 <strong>英文测试集</strong>，再进行 <strong>中文测试集</strong>。</li>
+    </ul>
+
+    <div class="button-area">
+      <button class="select-btn english" onclick="location.href='index_1st_reviewer_debug_en.html'">
+        进入英文测试集
+      </button>
+
+      <button class="select-btn chinese" onclick="location.href='index_1st_reviewer_debug_zh.html'">
+        进入中文测试集
+      </button>
+    </div>
+  </div>
+
+</body>
+</html>

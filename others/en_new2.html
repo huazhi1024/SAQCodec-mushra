@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MUSHRA 听音测试</title>
+  <style>
+    :root {
+      --primary-color: #1a73e8;
+      --success-color: #34a853;
+      --warning-color: #f9ab00;
+      --danger-color: #ea4335;
+      --light-bg: #f8f9fb;
+      --border-color: #dadce0;
+      --text-color: #202124;
+      --card-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      --accent-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #f8f9fb, #e9edf7);
+      color: var(--text-color);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    
+    .container {
+      display: flex;
+      max-width: 1400px;
+      margin: 0 auto;
+      gap: 25px;
+    }
+    
+    .left-panel {
+      flex: 0 0 320px;
+      position: sticky;
+      top: 20px;
+      height: fit-content;
+      padding-bottom: 15px;
+    }
+    
+    .right-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    h1, h2, h3 {
+      text-align: center;
+      color: var(--text-color);
+    }
+    
+    h1 {
+      font-size: 1.8rem;
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 12px;
+      margin-bottom: 15px;
+    }
+    
+    h2 {
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    h2:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: var(--primary-color);
+      border-radius: 2px;
+    }
+    
+    .card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 15px;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border: 1px solid var(--border-color);
+    }
+    
+    .card:hover {
+      box-shadow: var(--accent-shadow);
+      transform: translateY(-2px);
+    }
+    
+    .instructions {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .instructions:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 100%;
+      background: var(--primary-color);
+      border-radius: 0 4px 4px 0;
+    }
+    
+    table.score-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 14px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      background: #fff;
+    }
+    
+    table th {
+      background: linear-gradient(to bottom, #f1f8ff, #e4f1ff);
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+    
+    table td {
+      background: #fff;
+    }
+    
+    table th, table td {
+      border: 1px solid var(--border-color);
+      padding: 14px 15px;
+      text-align: center;
+      vertical-align: middle;
+    }
+    
+    table tr:nth-child(even) {
+      background-color: #f9fcff;
+    }
+    
+    table.score-table tr.ref-row td {
+      background-color: #f0f9ff;
+    }
+    
+    .group-control {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0 25px;
+      padding: 18px;
+      background: linear-gradient(to right, #ffffff, #f8faff);
+      border-radius: 10px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      border: 1px solid #e0e5ff;
+    }
+    
+    .navigation-btns {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .group-control button {
+      padding: 12px 28px;
+      font-size: 15px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(to right, var(--primary-color), #1973d0);
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .group-control button i {
+      font-size: 18px;
+    }
+    
+    .group-control button:hover {
+      background: linear-gradient(to right, #1973d0, #1264bd);
+      box-shadow: 0 4px 8px rgba(26, 115, 232, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .group-control button:disabled {
+      background: linear-gradient(to right, #bdc3c7, #a0a8b7);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .group-info {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary-color);
+      min-width: 180px;
+      text-align: center;
+      padding: 10px 20px;
+      background: linear-gradient(to right, #f0f7ff, #e5f0ff);
+      border-radius: 30px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+      border: 1px solid #cddcff;
+    }
+    
+    .group {
+      display: none;
+      margin-bottom: 20px;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+    }
+    
+    .active {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+    
+    input[type="number"] {
+      width: 80px;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary-color);
+      transition: all 0.2s;
+      background: #f9fcff;
+    }
+    
+    input[type="number"]:focus {
+      border-color: var(--primary-color);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
+      background: #ffffff;
+    }
+    
+    audio {
+      width: 280px;
+      height: 42px;
+      border-radius: 25px;
+    }
+    
+    audio::-webkit-media-controls-panel {
+      background-color: #f4f9ff;
+      border-radius: 25px;
+    }
+    
+    .progress {
+      text-align: center;
+      margin: 15px 0;
+      font-weight: bold;
+      color: var(--primary-color);
+      font-size: 17px;
+      background: #f0f7ff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: var(--card-shadow);
+    }
+    
+    textarea {
+      width: 100%;
+      height: 200px;
+      padding: 15px;
+      font-size: 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: #f9fcff;
+      resize: vertical;
+      font-family: 'Consolas', monospace;
+      line-height: 1.6;
+      box-shadow: var(--card-shadow);
+      margin-top: 5px;
+      transition: all 0.3s;
+    }
+    
+    textarea:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.15);
+      background: #ffffff;
+    }
+    
+    .result-buttons {
+      text-align: center;
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .result-buttons button {
+      padding: 14px 28px;
+      font-size: 15px;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 600;
+      min-width: 160px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 3px 5px rgba(0,0,0,0.1);
+    }
+    
+    .collect-btn {
+      background: linear-gradient(to right, var(--success-color), #2d9a4c);
+    }
+    
+    .collect-btn:hover {
+      background: linear-gradient(to right, #2d9a4c, #288d44);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(52, 168, 83, 0.3);
+    }
+    
+    .download-btn {
+      background: linear-gradient(to right, var(--primary-color), #1973d0);
+    }
+    
+    .download-btn:hover {
+      background: linear-gradient(to right, #1973d0, #1264bd);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(26, 115, 232, 0.3);
+    }
+    
+    .clear-btn {
+      background: linear-gradient(to right, var(--danger-color), #d9392b);
+    }
+    
+    .clear-btn:hover {
+      background: linear-gradient(to right, #d9392b, #c82e21);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(234, 67, 53, 0.3);
+    }
+    
+    .rating-scale {
+      margin-top: 15px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    .rating-scale p {
+      margin: 8px 0;
+      padding: 12px 15px;
+      border-left: 4px solid;
+      background: #f9fcff;
+      border-radius: 0 6px 6px 0;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .rating-scale p:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    
+    .rating-scale p:nth-child(1) { border-color: var(--success-color); }
+    .rating-scale p:nth-child(2) { border-color: #5db861; }
+    .rating-scale p:nth-child(3) { border-color: var(--warning-color); }
+    .rating-scale p:nth-child(4) { border-color: #f57c00; }
+    .rating-scale p:nth-child(5) { border-color: var(--danger-color); }
+
+    .missing-scores {
+      color: var(--danger-color);
+      font-weight: bold;
+      margin: 15px 0;
+      padding: 14px;
+      background: linear-gradient(120deg, #ffeaea, #ffdada);
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid #ffcdd2;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    
+    .highlight-missing {
+      background-color: #ffeaea !important;
+      animation: pulse 1.8s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { background-color: #ffeaea; }
+      50% { background-color: #ffd6d6; }
+      100% { background-color: #ffeaea; }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .missing-score-input {
+      border-color: var(--danger-color) !important;
+      background-color: #ffeeee;
+      animation: shake 0.5s ease-in-out;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    
+    .completion-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.6);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal-content {
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      text-align: center;
+      max-width: 500px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+      transform: scale(0.95);
+      animation: modalAppear 0.4s forwards;
+    }
+    
+    @keyframes modalAppear {
+      to { transform: scale(1); }
+    }
+    
+    .modal-content h3 {
+      margin: 0 0 20px;
+      font-size: 24px;
+      color: var(--primary-color);
+    }
+    
+    .modal-content p {
+      margin-bottom: 25px;
+      font-size: 17px;
+      color: #444;
+    }
+    
+    .modal-content button {
+      margin: 5px 10px;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(to right, var(--primary-color), #1264bd);
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      min-width: 180px;
+    }
+    
+    .modal-content button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .subtitle {
+      margin-top: 8px;
+      font-style: italic;
+      color: #5f6368;
+      font-size: 13px;
+      padding: 0 10px;
+      line-height: 1.4;
+    }
+    
+    .audio-controls-hint {
+      text-align: center;
+      margin: 14px 0;
+      font-size: 14px;
+      color: var(--warning-color);
+      background: #fff9e6;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    
+    .keyboard-shortcuts {
+      margin-top: 20px;
+      padding: 14px;
+      background: #f9fcff;
+      border-radius: 8px;
+      font-size: 13px;
+      border: 1px solid #edf2ff;
+    }
+    
+    .keyboard-shortcuts p {
+      margin: 8px 0;
+    }
+    
+    .shortcut-key {
+      display: inline-block;
+      padding: 4px 8px;
+      background: #eaf0ff;
+      border-radius: 4px;
+      font-family: monospace;
+      font-weight: bold;
+      color: var(--primary-color);
+      border: 1px solid #d0dcff;
+    }
+    
+    .group-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 25px;
+      background: linear-gradient(90deg, #f0f7ff, #f6faff);
+      color: var(--primary-color);
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .completion-status {
+      font-size: 14px;
+      font-weight: 700;
+      background: #e3f1ff;
+      padding: 8px 16px;
+      border-radius: 20px;
+    }
+    
+    .completed {
+      background: #e7ffe8;
+      color: var(--success-color);
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-right: 5px;
+    }
+    
+    .important-note {
+      background: #fff8e1;
+      border-left: 4px solid var(--warning-color);
+      padding: 12px 15px;
+      margin: 15px 0;
+      border-radius: 0 8px 8px 0;
+      font-weight: 500;
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 1024px) {
+      .container {
+        flex-direction: column;
+      }
+      
+      .left-panel {
+        flex: none;
+        position: static;
+        margin-bottom: 20px;
+      }
+      
+      audio {
+        width: 100%;
+        max-width: 280px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+      
+      .group-control {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+      }
+      
+      .navigation-btns {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .result-buttons {
+        flex-direction: column;
+        gap: 12px;
+      }
+      
+      .result-buttons button {
+        width: 100%;
+      }
+      
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+      
+      h1 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- 左侧固定评分规则面板 -->
+  <div class="left-panel">
+    <div class="card instructions">
+      <h1>MUSHRA 听音测试</h1>
+      
+      <h3>打分说明</h3>
+
+      <div class="important-note">
+        请根据每个音频 <strong style="color: var(--danger-color);">与参考音频的音质差异</strong> 进行 0–100 分的评分，从以下5个角度进行比较：
+        <strong>音频要完整播放</strong>，可反复播放仔细听辨后再打分。
+      </div>  
+      
+      <ul style="line-height: 1.85; margin: 0 0 15px 25px;">
+        <li><span class="badge" style="background: #f0f7ff; color: var(--primary-color);">内容</span> 单词是否读正确</li>
+        <li><span class="badge" style="background: #f0f7ff; color: var(--primary-color);">音色</span> 说话人是否一致</li>
+        <li><span class="badge" style="background: #f0f7ff; color: var(--primary-color);">韵律</span> 语调节奏是否一致</li>
+        <li><span class="badge" style="background: #f0f7ff; color: var(--primary-color);">响度</span> 音量是否稳定</li>
+        <li><span class="badge" style="background: #f0f7ff; color: var(--primary-color);">噪声</span> 背景是否干净</li>
+      </ul>
+      
+      <div class="rating-scale">
+        <p><b>85–100</b>：非常好，感觉与参考几乎无差别</p>
+        <p><b>70–85</b>：良好，轻微差别（1个角度轻微差别）</p>
+        <p><b>50–70</b>：一般，明显下降（1个角度明显差别）</p>
+        <p><b>20–50</b>：差，有严重失真（2个以上角度明显差别）</p>
+        <p><b>0–20</b>：非常差，极度刺耳或无法接受</p>
+      </div>
+      
+      <div class="button-group" style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 20px; justify-content: center;">
+        <button onclick="resetAudioOrder()" 
+                style="padding: 10px 16px; font-size: 14px; 
+                       background: linear-gradient(to right, #5f6368, #4a4d52); 
+                       color: white; border: none; 
+                       border-radius: 8px; cursor: pointer; 
+                       font-weight: 600; display: flex; align-items: center; gap: 6px;">
+          <span>重新随机音频顺序</span>
+        </button>
+        
+        <button onclick="showCurrentOrder()" 
+                style="padding: 10px 16px; font-size: 14px; 
+                       background: linear-gradient(to right, #17a2b8, #1393a5); 
+                       color: white; border: none; 
+                       border-radius: 8px; cursor: pointer; font-weight: 600;">
+          显示当前顺序
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 右侧主要内容区域 -->
+  <div class="right-panel">
+    <div class="group-control">
+      <div class="navigation-btns">
+        <button id="prev-group" disabled>
+          <i>←</i> 上一组
+        </button>
+        <button id="next-group">
+          下一组 <i>→</i>
+        </button>
+      </div>
+      <div class="group-info">第 <span id="current-group">1</span> 组 / 共 <span id="total-groups">24</span> 组</div>
+    </div>
+
+    <div id="groups">
+      <!-- 动态生成组内容 -->
+    </div>
+
+    <div class="progress" id="overall-progress"></div>
+
+    <div class="card">
+      <h2>评分结果</h2>
+      <textarea id="results" readonly placeholder="完成所有打分后，点击【收集打分】按钮生成结果文本"></textarea>
+
+      <div class="result-buttons">
+        <button class="collect-btn">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style="margin-right:8px">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
+          </svg>
+          收集打分
+        </button>
+        <button class="download-btn">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style="margin-right:8px">
+            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path>
+          </svg>
+          保存打分文件
+        </button>
+        <button class="clear-btn">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" style="margin-right:8px">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+          </svg>
+          清空打分
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 完成提示弹窗 -->
+<div id="completionModal" class="completion-modal">
+  <div class="modal-content">
+    <h3>🎉 评分完成</h3>
+    <p>您已完成所有24组评测任务！感谢您的专业评测！</p>
+    <button onclick="downloadAndClose()">保存并下载结果</button>
+    <button onclick="closeModal()" style="background: linear-gradient(to right, #9e9e9e, #7c7c7c);">仅查看结果</button>
+  </div>
+</div>
+
+<!-- 页面跳转按钮 -->
+<div class="card" style="margin-top: 30px; text-align: center;">
+  <button onclick="location.href='zh.html'"
+          style="
+            padding: 14px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            background: linear-gradient(90deg, var(--success-color), #2d9a4c);
+            color: white;
+            transition: 0.3s;
+            font-weight: 600;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+          "
+          onmouseover="this.style.boxShadow='0 6px 20px rgba(52, 168, 83, 0.4)', this.style.transform='translateY(-3px)'"
+          onmouseout="this.style.boxShadow='0 4px 15px rgba(0,0,0,0.15)', this.style.transform='none'"
+        >
+    完成测试 → 进入中文测试集
+  </button>
+  <p style="margin-top: 12px; font-size: 13px; color: #666;">完成当前测试后继续评估中文测试集</p>
+</div>
+
+<script>
+  const totalGroups = 24; // 设置组数
+  const modelsPerGroup = 10;
+  let currentGroupIndex = 0;
+
+  const groupsContainer = document.getElementById('groups');
+  document.getElementById('total-groups').textContent = totalGroups;
+
+  // 音频组数据（示例）
+  const audioGroups = [
+    {
+      groupName: "Group1 (Bitrate: ~1000bps)",
+      refAudio: "audio/GT/GT_testAditi-snips-test-288.wav",
+      refSubtitle: "What is the forecast for starting at 3 a.m. in Dubults for wrong weather?",
+      models: [
+        { id: 1, path: "audio/GT/GT_testAditi-snips-test-288.wav", hidden_method: "M0" },
+        { id: 2, path: "audio/recon/EnCodec/1k/EC1k_testAditi-snips-test-288.wav", hidden_method: "M1.1" },
+        { id: 3, path: "audio/recon/HC/1k/HC1k_testAditi-snips-test-288.wav", hidden_method: "M2.1" },
+        { id: 4, path: "audio/recon/TiCodec/1k/TC1k_testAditi-snips-test-288.wav", hidden_method: "M3.1" },
+        { id: 5, path: "audio/recon/DAC/1k/DAC1k_testAditi-snips-test-288.wav", hidden_method: "M4.1" },
+        { id: 6, path: "audio/recon/mimi/mimi1100/mimi1100_testAditi-snips-test-288.wav", hidden_method: "M5.1" },
+        { id: 7, path: "audio/recon/snac/snac980_testAditi-snips-test-288.wav", hidden_method: "M6.1" },
+        { id: 8, path: "audio/recon/SemantiCodec/1.25k/SC1.25k_testAditi-snips-test-288.wav", hidden_method: "M8.1" },
+        { id: 9, path: "audio/recon/Ours/0.97k/Ours0.97k_testAditi-snips-test-288.wav", hidden_method: "M9.1" },
+        { id: 10, path: "audio/speex/3000bps/GT_testAditi-snips-test-288.wav", hidden_method: "M10" }
+      ]
+    },
+    {
+      groupName: "Group2 (Bitrate: ~1000bps)", 
+      refAudio: "audio/GT/GT_testAditi-snips-test-531.wav",
+      refSubtitle: "Look for the television show me the prince",
+      models: [
+        { id: 1, path: "audio/GT/GT_testAditi-snips-test-531.wav", hidden_method: "M0" },
+        { id: 2, path: "audio/recon/EnCodec/1k/EC1k_testAditi-snips-test-531.wav", hidden_method: "M1.1" },
+        { id: 3, path: "audio/recon/HC/1k/HC1k_testAditi-snips-test-531.wav", hidden_method: "M2.1" },
+        { id: 4, path: "audio/recon/TiCodec/1k/TC1k_testAditi-snips-test-531.wav", hidden_method: "M3.1" },
+        { id: 5, path: "audio/recon/DAC/1k/DAC1k_testAditi-snips-test-531.wav", hidden_method: "M4.1" },
+        { id: 6, path: "audio/recon/mimi/mimi1100/mimi1100_testAditi-snips-test-531.wav", hidden_method: "M5.1" },
+        { id: 7, path: "audio/recon/snac/snac980_testAditi-snips-test-531.wav", hidden_method: "M6.1" },
+        { id: 8, path: "audio/recon/SemantiCodec/1.25k/SC1.25k_testAditi-snips-test-531.wav", hidden_method: "M8.1" },
+        { id: 9, path: "audio/recon/Ours/0.97k/Ours0.97k_testAditi-snips-test-531.wav", hidden_method: "M9.1" },
+        { id: 10, path: "audio/speex/3000bps/GT_testAditi-snips-test-531.wav", hidden_method: "M10" }
+      ]
+    }
+    // 其他23组数据应在此处添加...
+  ];
+
+  // 填充剩余组（仅示例）
+  for (let i = 3; i <= totalGroups; i++) {
+    audioGroups.push({
+      groupName: `Group${i} (Bitrate: ~1000bps)`,
+      refAudio: "audio/GT/GT_sample.wav",
+      refSubtitle: "This is a sample audio subtitle " + i,
+      models: Array.from({length: 10}, (_, j) => ({
+        id: j+1,
+        path: `audio/model${j+1}_sample.wav`,
+        hidden_method: `M${j}`
+      }))
+    });
+  }
+
+  // ===================== 随机播放逻辑 =====================
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  function getShuffleKey(groupName) {
+    return `shuffle_${groupName.replace(/\s+/g, '_')}`;
+  }
+
+  function initializeRandomOrder() {
+    audioGroups.forEach(group => {
+      const key = getShuffleKey(group.groupName);
+      
+      if (!localStorage.getItem(key)) {
+        const shuffled = [...group.models];
+        shuffleArray(shuffled);
+        
+        localStorage.setItem(
+          key,
+          JSON.stringify(shuffled.map(m => m.hidden_method))
+        );
+      }
+
+      const savedOrder = JSON.parse(localStorage.getItem(key));
+      const orderedModels = [];
+      
+      savedOrder.forEach(hiddenMethod => {
+        const model = group.models.find(m => m.hidden_method === hiddenMethod);
+        if (model) orderedModels.push(model);
+      });
+      
+      group.models.forEach(model => {
+        if (!orderedModels.find(m => m.hidden_method === model.hidden_method)) {
+          orderedModels.push(model);
+        }
+      });
+      
+      group.models = orderedModels;
+      
+      group.models.forEach((model, index) => {
+        model.displayId = index + 1;
+      });
+    });
+  }
+
+  initializeRandomOrder();
+
+  // ===================== 重置随机顺序 =====================
+  function resetAudioOrder() {
+    if(confirm('确定要重新随机所有音频的播放顺序吗？')) {
+      audioGroups.forEach(group => {
+        localStorage.removeItem(getShuffleKey(group.groupName));
+      });
+      
+      alert('音频顺序已重置！重新加载页面将显示更新后的随机顺序。');
+      
+      // 可选：立即刷新页面重新随机
+      // location.reload()
+    }
+  }
+
+  // ===================== 显示当前顺序 =====================
+  function showCurrentOrder() {
+    let orderInfo = "当前音频顺序（仅展示前3组作为示例）:
+
+";
+    
+    // 为防止性能问题，仅显示前3组
+    for (let i = 0; i < Math.min(3, audioGroups.length); i++) {
+      const group = audioGroups[i];
+      orderInfo += `${group.groupName}:\n`;
+      group.models.forEach(model => {
+        orderInfo += `  编号${model.displayId}: ${model.hidden_method}
+`;
+      });
+      orderInfo += "\n";
+    }
+    
+    alert(orderInfo);
+  }
+
+  // 生成组
+  audioGroups.forEach((group, index) => {
+    const groupDiv = document.createElement('div');
+    groupDiv.className = 'group' + (index === 0 ? ' active' : '');
+    groupDiv.id = `group-${index+1}`;
+
+    // 组标题区域
+    const groupHeader = document.createElement('div');
+    groupHeader.className = 'group-header';
+    
+    const title = document.createElement('h2');
+    title.textContent = group.groupName;
+    
+    const completionStatus = document.createElement('div');
+    completionStatus.className = 'completion-status';
+    completionStatus.id = `completion-${index+1}`;
+    completionStatus.textContent = '未完成';
+    
+    groupHeader.appendChild(title);
+    groupHeader.appendChild(completionStatus);
+    groupDiv.appendChild(groupHeader);
+
+    const table = document.createElement('table');
+    table.className = 'score-table';
+    const thead = document.createElement('thead');
+    thead.innerHTML = `
+      <tr>
+        <th width="15%">编号</th>
+        <th width="50%">音频播放</th>
+        <th width="35%">打分 (0-100)</th>
+      </tr>
+    `;
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+
+    // 参考音频
+    const refRow = document.createElement('tr');
+    refRow.className = 'ref-row';
+    refRow.innerHTML = `
+      <td><b>参考</b></td>
+      <td colspan="2" style="text-align: left; padding-left: 25px;">
+        <audio controls src="${group.refAudio}"></audio>
+        <div class="subtitle">${group.refSubtitle}</div>  
+      </td>
+    `;
+    tbody.appendChild(refRow);
+
+    // 控制提示
+    const hintRow = document.createElement('tr');
+    hintRow.innerHTML = `
+      <td colspan="3" class="audio-controls-hint">
+        🔊 提示：反复播放音频与参考音频比较，完整听完整段音频后再打分
+      </td>
+    `;
+    tbody.appendChild(hintRow);
+
+    // 模型音频
+    group.models.forEach(model => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${model.displayId}</td>
+        <td><audio controls src="${model.path}"></audio></td>
+        <td>
+          <input type="number" min="0" max="100" 
+               data-group="${index + 1}" 
+               data-model="model${model.id}" 
+               data-hidden="${model.hidden_method || ''}"
+               data-original-id="${model.id}"
+               data-display-id="${model.displayId}"
+               placeholder="输入分数">
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+
+    table.appendChild(tbody);
+    groupDiv.appendChild(table);
+    groupsContainer.appendChild(groupDiv);
+  });
+
+  // ===================== 页面导航和交互逻辑 =====================
+  function showGroup(index) {
+    const groups = document.querySelectorAll('.group');
+    groups.forEach((g, i) => {
+      g.classList.toggle('active', i === index);
+      if (i === index) {
+        updateGroupCompletionStatus(i + 1);
+      }
+    });
+    updateOverallProgress();
+    updateGroupControls();
+    
+    // 自动聚焦到第一个输入框
+    setTimeout(() => {
+      const activeGroup = document.querySelector('.group.active');
+      const firstInput = activeGroup.querySelector('input[type="number"]');
+      if (firstInput) {
+        firstInput.focus();
+      }
+    }, 100);
+  }
+
+  function updateGroupControls() {
+    document.getElementById('prev-group').disabled = currentGroupIndex === 0;
+    document.getElementById('next-group').disabled = currentGroupIndex === totalGroups - 1;
+    document.getElementById('current-group').textContent = currentGroupIndex + 1;
+  }
+
+  function checkCurrentGroupScores() {
+    const currentGroup = document.querySelector('.group.active');
+    const inputs = currentGroup.querySelectorAll('input[type="number"]');
+    
+    for (let input of inputs) {
+      if (input.value === "" || isNaN(input.value)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  document.getElementById('prev-group').addEventListener('click', () => {
+    if (currentGroupIndex > 0) {
+      currentGroupIndex--;
+      showGroup(currentGroupIndex);
+    }
+  });
+
+  document.getElementById('next-group').addEventListener('click', () => {
+    if (!checkCurrentGroupScores()) {
+      document.querySelector('.group.active').insertAdjacentHTML('beforeend', `
+        <div class="missing-scores">
+          请完成当前组所有打分后再继续！（红色框显示未打分项）
+        </div>
+      `);
+      
+      const inputs = document.querySelector('.group.active').querySelectorAll('input[type="number"]');
+      inputs.forEach(input => {
+        if (input.value === "" || isNaN(input.value)) {
+          input.classList.add('missing-score-input');
+          input.parentElement.parentElement.classList.add('highlight-missing');
+        }
+      });
+      
+      // 滚动到警告信息
+      setTimeout(() => {
+        const alertDiv = document.querySelector('.missing-scores');
+        alertDiv.scrollIntoView({behavior: 'smooth'});
+      }, 100);
+      return;
+    }
+    
+    if (currentGroupIndex < totalGroups - 1) {
+      currentGroupIndex++;
+      showGroup(currentGroupIndex);
+    } else {
+      // 完成最后一组后显示弹窗
+      document.getElementById('completionModal').style.display = 'flex';
+    }
+  });
+
+  function updateOverallProgress() {
+    const totalInputs = document.querySelectorAll('input[type="number"]').length;
+    let filledInputs = 0;
+    
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+      if (input.value && !isNaN(input.value)) {
+        filledInputs++;
+      }
+    });
+    
+    const percentage = Math.round((filledInputs / totalInputs) * 100);
+    document.getElementById('overall-progress').textContent = 
+      `当前组 ${currentGroupIndex + 1}/${totalGroups} | 总体进度: ${filledInputs}/${totalInputs} (${percentage}%)`;
+  }
+
+  // ===================== 分数管理和存储逻辑 =====================
+  function updateProgress(group) {
+    const inputs = document.querySelectorAll(`input[data-group="${group}"]`);
+    let filled = 0;
+    inputs.forEach(input => {
+      if (input.value !== "") filled++;
+    });
+  }
+
+  function saveScoresToStorage() {
+    const inputs = document.querySelectorAll('input[type="number"]');
+    let scores = {};
+    inputs.forEach(input => {
+      const group = input.dataset.group;
+      const model = input.dataset.model;
+      const value = input.value;
+      if (!scores[group]) scores[group] = {};
+      scores[group][model] = value;
+    });
+    localStorage.setItem('mushraScores', JSON.stringify(scores));
+  }
+
+  function loadScoresFromStorage() {
+    const saved = localStorage.getItem('mushraScores');
+    if (saved) {
+      const scores = JSON.parse(saved);
+      for (const group in scores) {
+        for (const model in scores[group]) {
+          const input = document.querySelector(`input[data-group="${group}"][data-model="${model}"]`);
+          if (input) {
+            input.value = scores[group][model];
+          }
+        }
+      }
+    }
+  }
+
+  function checkMissingScores() {
+    const inputs = document.querySelectorAll('input[type="number"]');
+    let missingScores = {};
+    
+    inputs.forEach(input => {
+      const group = input.dataset.group;
+      const model = input.dataset.model;
+      const value = input.value;
+      
+      if (value === "" || isNaN(value)) {
+        if (!missingScores[group]) {
+          missingScores[group] = [];
+        }
+        missingScores[group].push(model);
+        
+        input.classList.add('missing-score-input');
+        input.parentElement.parentElement.classList.add('highlight-missing');
+      } else {
+        input.classList.remove('missing-score-input');
+        input.parentElement.parentElement.classList.remove('highlight-missing');
+      }
+    });
+    
+    return missingScores;
+  }
+
+  document.querySelector('.collect-btn').addEventListener('click', collectScores);
+  document.querySelector('.download-btn').addEventListener('click', downloadScores);
+  document.querySelector('.clear-btn').addEventListener('click', clearScores);
+  
+  function collectScores() {
+    const missingScores = checkMissingScores();
+    
+    if (Object.keys(missingScores).length > 0) {
+      showMissingScoresAlert();
+      return false;
+    }
+    
+    const inputs = document.querySelectorAll('input[type="number"]');
+    let results = {};
+
+    inputs.forEach(input => {
+      const group = input.dataset.group;
+      const model = input.dataset.hidden || input.dataset.model;
+      const score = input.value;
+
+      if (!results[`Group ${group}`]) {
+        results[`Group ${group}`] = {};
+      }
+      results[`Group ${group}`][model] = score;
+    });
+
+    let resultText = "";
+    for (const [group, models] of Object.entries(results)) {
+      resultText += `${group}:\n`;
+      for (const [model, score] of Object.entries(models)) {
+        resultText += `  ${model}: ${score}\n`;
+      }
+      resultText += '
+';
+    }
+
+    document.getElementById('results').value = resultText;
+    
+    // 移除现有提示（如果有）
+    const existingAlert = document.querySelector('.missing-scores');
+    if (existingAlert) {
+      existingAlert.remove();
+    }
+    
+    return true;
+  }
+
+  function downloadScores() {
+    if (!collectScores()) return;
+    
+    const text = document.getElementById('results').value;
+    const blob = new Blob([text], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `MUSHRA_评分结果_${new Date().toLocaleString('zh-CN').replace(/[:/]/g, '-')}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
+  function clearScores() {
+    if (confirm("确定要清空所有已保存的打分吗？此操作不可恢复。")) {
+      localStorage.removeItem('mushraScores');
+      document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.value = '';
+        input.classList.remove('missing-score-input');
+        input.parentElement.parentElement.classList.remove('highlight-missing');
+      });
+      document.getElementById('results').value = '';
+      
+      const existingAlert = document.querySelector('.missing-scores');
+      if (existingAlert) existingAlert.remove();
+      
+      // 重置组状态
+      for (let i = 1; i <= totalGroups; i++) {
+        document.getElementById(`completion-${i}`).textContent = '未完成';
+        document.getElementById(`completion-${i}`).className = 'completion-status';
+      }
+    }
+  }
+
+  function showMissingScoresAlert() {
+    document.querySelector('.result-buttons').insertAdjacentHTML('beforebegin', `
+      <div class="missing-scores">
+        请完成所有组所有打分后再收集结果（红色框显示未打分项）
+      </div>
+    `);
+    
+    // 滚动到提示
+    setTimeout(() => {
+      document.querySelector('.missing-scores').scrollIntoView({behavior: 'smooth'});
+    }, 50);
+    
+    return false;
+  }
+
+  function downloadAndClose() {
+    downloadScores();
+    closeModal();
+  }
+
+  function closeModal() {
+    document.getElementById('completionModal').style.display = 'none';
+  }
+
+  // ===================== 实时结果更新 =====================
+  function updateResultsBox() {
+    collectScores(); 
+  }
+
+  // 键盘快捷键
+  document.addEventListener('keydown', function(e) {
+    const activeInput = document.activeElement;
+    
+    if (activeInput && activeInput.type === 'number' && 
+        activeInput.hasAttribute('data-group')) {
+      
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        let value = parseInt(activeInput.value) || 0;
+        if (value < 100) {
+          activeInput.value = value + 1;
+          activeInput.dispatchEvent(new Event('input'));
+        }
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        let value = parseInt(activeInput.value) || 0;
+        if (value > 0) {
+          activeInput.value = value - 1;
+          activeInput.dispatchEvent(new Event('input'));
+        }
+      }
+      
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const allInputs = Array.from(document.querySelectorAll('input[type="number"]'));
+        const currentIndex = allInputs.indexOf(activeInput);
+        if (currentIndex < allInputs.length - 1) {
+          allInputs[currentIndex + 1].focus();
+        }
+      }
+    }
+    
+    if (e.key === 'ArrowLeft' && !e.ctrlKey) {
+      document.getElementById('prev-group').click();
+    } else if (e.key === 'ArrowRight' && !e.ctrlKey) {
+      document.getElementById('next-group').click();
+    }
+  });
+
+  // 更新组完成状态
+  function updateGroupCompletionStatus(groupIndex) {
+    const groupInputs = document.querySelectorAll(`#group-${groupIndex} input[type="number"]`);
+    let completed = true;
+    
+    groupInputs.forEach(input => {
+      if (!input.value || isNaN(input.value)) {
+        completed = false;
+      }
+    });
+    
+    const statusElement = document.getElementById(`completion-${groupIndex}`);
+    if (statusElement) {
+      statusElement.textContent = completed ? '已完成' : '未完成';
+      statusElement.className = completed ? 'completion-status completed' : 'completion-status';
+    }
+  }
+
+  // 输入监听器
+  document.addEventListener('input', (e) => {
+    if (e.target.matches('input[type="number"]')) {
+      const group = e.target.dataset.group;
+      updateProgress(group);
+      saveScoresToStorage();
+      updateResultsBox();
+      updateGroupCompletionStatus(group);
+
+      e.target.classList.remove('missing-score-input');
+      e.target.parentElement.parentElement.classList.remove('highlight-missing');
+
+      const missingScores = checkMissingScores();
+      if (Object.keys(missingScores).length === 0) {
+        const existingAlert = document.querySelector('.missing-scores');
+        if (existingAlert) existingAlert.remove();
+      }
+    }
+  });
+
+  // 页面加载时初始化
+  window.onload = () => {
+    loadScoresFromStorage();
+    updateOverallProgress();
+    updateGroupControls();
+    
+    for (let i = 1; i <= totalGroups; i++) {
+      updateGroupCompletionStatus(i);
+    }
+  }
+</script>
+
+</body>
+</html>
